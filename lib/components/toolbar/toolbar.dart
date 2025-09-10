@@ -449,7 +449,43 @@ class _ToolbarState extends State<Toolbar> {
               ToolbarIconButton(
                 tooltip: t.editor.toolbar.photo,
                 enabled: !widget.readOnly,
-                onPressed: widget.pickPhoto,
+                onPressed: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text(t.editor.toolbar.photo),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListTile(
+                              leading: const Icon(Icons.photo),
+                              title: Text('Pick Image from Device'),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                widget.pickPhoto();
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.paste),
+                              title: Text('Paste Image from Clipboard'),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                widget.paste();
+                              },
+                            ),
+                          ],
+                        ),
+                        actions: [
+                          TextButton(
+                            child: Text(t.common.cancel),
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
                 padding: buttonPadding,
                 child: const AdaptiveIcon(
                   icon: Icons.photo,
